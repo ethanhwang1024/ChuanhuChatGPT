@@ -120,7 +120,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
 
                     buyBtn = gr.Button("ip被OpenAI禁了，正在处理", elem_id="buy_btn")
                     buyBtn1 = gr.Markdown("临时使用请先访问https://huggingface.co/spaces\n"
-                                          "/JohnSmith9982/ChuanhuChatGPT")
+                                          "/LeoLeoLeo1/ChuanhuChatGPT")
                     # buyBtn = gr.Button("去外部网站购买专属KEY?",elem_id="buy_btn").style(size="sm")
 
                     model_select_dropdown = gr.Dropdown(
