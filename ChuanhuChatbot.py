@@ -17,7 +17,7 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] [%(filename)s:%(lineno)d] %(message)s",
 )
 
-my_api_key = "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"  # 在这里输入你的 API 密钥
+my_api_key = "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"  # 在这里输入你的 API 密钥
 
 # if we are running in Docker
 if os.environ.get("dockerrun") == "yes":
@@ -27,6 +27,8 @@ else:
 
 authflag = False
 auth_list = []
+
+os.environ["OPENAI_API_KEY"]=my_api_key
 
 
 def redirect_to_outside():
