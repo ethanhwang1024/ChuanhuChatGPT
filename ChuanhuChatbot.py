@@ -17,7 +17,7 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] [%(filename)s:%(lineno)d] %(message)s",
 )
 
-my_api_key = "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"  # 在这里输入你的 API 密钥
+my_api_key = "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"  # 在这里输入你的 API 密钥
 
 # if we are running in Docker
 if os.environ.get("dockerrun") == "yes":
@@ -105,7 +105,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                     keyTxt = gr.Textbox(
                         show_label=True,
                         placeholder=f"OpenAI API-key...",
-                        value=hide_middle_chars(my_api_key),
+                        value=my_api_key,
                         type="password",
                         visible=not HIDE_MY_KEY,
                         label="API-Key",
@@ -278,7 +278,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     )
 
     def redirect_to_outside():
-        webbrowser.open_new_tab("https://chatgpt.gmail1688.com/")
+        webbrowser.open_new_tab("https://chatgpt.insjc.info/")
 
     buyBtn.click(
         redirect_to_outside
