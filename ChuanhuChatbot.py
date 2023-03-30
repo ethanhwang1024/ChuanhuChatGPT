@@ -118,8 +118,8 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                     )
                     usageTxt = gr.Markdown("**发送消息** 或 **提交key** 以显示额度", elem_id="usage_display")
 
-                    buyBtn = gr.Button("本站ip被OpenAI禁了，正在处理", elem_id="buy_btn")
-                    buyBtn1 = gr.Markdown("临时使用请先访问https://huggingface.co/spaces"
+                    buyBtn = gr.Button("ip被OpenAI禁了，正在处理", elem_id="buy_btn")
+                    buyBtn1 = gr.Markdown("临时使用请先访问https://huggingface.co/spaces\n"
                                           "/JohnSmith9982/ChuanhuChatGPT")
                     # buyBtn = gr.Button("去外部网站购买专属KEY?",elem_id="buy_btn").style(size="sm")
 
