@@ -2,6 +2,7 @@
 import os
 import logging
 import sys
+import webbrowser
 
 import gradio as gr
 
@@ -16,7 +17,7 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] [%(filename)s:%(lineno)d] %(message)s",
 )
 
-my_api_key = ""  # 在这里输入你的 API 密钥
+my_api_key = "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"  # 在这里输入你的 API 密钥
 
 # if we are running in Docker
 if os.environ.get("dockerrun") == "yes":
@@ -110,6 +111,9 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         label="API-Key",
                     )
                     usageTxt = gr.Markdown("**发送消息** 或 **提交key** 以显示额度", elem_id="usage_display")
+
+                    buyBtn = gr.Button("去外部网站购买专属KEY?",elem_id="buy_btn").style(size="sm")
+
                     model_select_dropdown = gr.Dropdown(
                         label="选择模型", choices=MODELS, multiselect=False, value=MODELS[0]
                     )
@@ -273,6 +277,12 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
         fn=get_usage, inputs=[user_api_key], outputs=[usageTxt], show_progress=False
     )
 
+    def redirect_to_outside():
+        webbrowser.open_new_tab("https://chatgpt.gmail1688.com/")
+
+    buyBtn.click(
+        redirect_to_outside
+    )
 
     # Chatbot
     cancelBtn.click(cancel_outputing, [], [])
@@ -406,11 +416,11 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
 
 logging.info(
     colorama.Back.GREEN
-    + "\n川虎的温馨提示：访问 http://localhost:7860 查看界面"
+    + "\n温馨提示：访问 http://localhost:7860 查看界面"
     + colorama.Style.RESET_ALL
 )
 # 默认开启本地服务器，默认可以直接从IP访问，默认不创建公开分享链接
-demo.title = "川虎ChatGPT 🚀"
+demo.title = "ChatGPT 🚀"
 
 if __name__ == "__main__":
     reload_javascript()
@@ -440,9 +450,9 @@ if __name__ == "__main__":
                 inbrowser=True,
             )
         else:
-            demo.queue(concurrency_count=CONCURRENT_COUNT).launch(
-                share=False, favicon_path="./assets/favicon.ico", inbrowser=True
-            )  # 改为 share=True 可以创建公开分享链接
-        # demo.queue(concurrency_count=CONCURRENT_COUNT).launch(server_name="0.0.0.0", server_port=7860, share=False) # 可自定义端口
+            # demo.queue(concurrency_count=CONCURRENT_COUNT).launch(
+            #     share=False, favicon_path="./assets/favicon.ico", inbrowser=True
+            # )  # 改为 share=True 可以创建公开分享链接
+            demo.queue(concurrency_count=CONCURRENT_COUNT).launch(server_name="0.0.0.0", server_port=80, share=False) # 可自定义端口
         # demo.queue(concurrency_count=CONCURRENT_COUNT).launch(server_name="0.0.0.0", server_port=7860,auth=("在这里填写用户名", "在这里填写密码")) # 可设置用户名与密码
         # demo.queue(concurrency_count=CONCURRENT_COUNT).launch(auth=("在这里填写用户名", "在这里填写密码")) # 适合Nginx反向代理

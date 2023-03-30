@@ -3,6 +3,12 @@
     --chatbot-color-dark: #121111;
 }
 
+#buy_btn {
+    width: 90%;
+    min-height: 2em;
+    margin: 0 1em;
+}
+
 /* 覆盖gradio的页脚信息QAQ */
 footer {
     display: none !important;
