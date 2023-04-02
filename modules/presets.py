@@ -22,8 +22,8 @@ no_input_msg = "请输入对话内容。"  # 未输入对话内容
 timeout_streaming = 10  # 流式对话时的超时时间
 timeout_all = 200  # 非流式对话时的超时时间
 enable_streaming_option = True  # 是否启用选择选择是否实时显示回答的勾选框
-HIDE_MY_KEY = False  # 如果你想在UI中隐藏你的 API 密钥，将此值设置为 True
-CONCURRENT_COUNT = 100 # 允许同时使用的用户数量
+HIDE_MY_KEY = True  # 如果你想在UI中隐藏你的 API 密钥，将此值设置为 True
+CONCURRENT_COUNT = 10 # 允许同时使用的用户数量
 
 SIM_K = 5
 INDEX_QUERY_TEMPRATURE = 1.0

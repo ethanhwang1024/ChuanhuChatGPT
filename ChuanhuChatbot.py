@@ -17,7 +17,8 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] [%(filename)s:%(lineno)d] %(message)s",
 )
 
-my_api_key = "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"  # 在这里输入你的 API 密钥
+
+my_api_key = ""  # 在这里输入你的 API 密钥
 
 # if we are running in Docker
 if os.environ.get("dockerrun") == "yes":
@@ -29,9 +30,9 @@ authflag = False
 auth_list = []
 
 
-
-def redirect_to_outside():
-    webbrowser.open_new_tab("https://chatgpt.insjc.info/")
+#
+# def redirect_to_outside():
+#     webbrowser.open_new_tab("https://chatgpt.insjc.info/")
 
 
 if not my_api_key:
@@ -118,9 +119,10 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                     )
                     usageTxt = gr.Markdown("**发送消息** 或 **提交key** 以显示额度", elem_id="usage_display")
 
-                    buyBtn = gr.Button("ip被OpenAI禁了，正在处理", elem_id="buy_btn")
-                    buyBtn1 = gr.Markdown("临时使用请先访问https://huggingface.co/spaces\n"
-                                          "/LeoLeoLeo1/ChuanhuChatGPT")
+                    # buyBtn = gr.Button("ip被OpenAI禁了，正在处理", elem_id="buy_btn")
+                    buyBtn = gr.Markdown('''
+                    如无法使用请先访问[huggingface](https://huggingface.co/)
+                                          上的相关项目''',elem_id="buy_btn")
                     # buyBtn = gr.Button("去外部网站购买专属KEY?",elem_id="buy_btn").style(size="sm")
 
                     model_select_dropdown = gr.Dropdown(
@@ -287,9 +289,9 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     )
 
 
-    buyBtn.click(
-        redirect_to_outside
-    )
+    # buyBtn.click(
+    #     redirect_to_outside
+    # )
 
     # Chatbot
     cancelBtn.click(cancel_outputing, [], [])
