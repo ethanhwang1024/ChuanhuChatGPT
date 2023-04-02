@@ -117,7 +117,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         visible=not HIDE_MY_KEY,
                         label="API-Key",
                     )
-                    usageTxt = gr.Markdown("**发送消息** 或 **提交key** 以显示额度", elem_id="usage_display")
+                    # usageTxt = gr.Markdown("**发送消息** 或 **提交key** 以显示额度", elem_id="usage_display")
 
                     # buyBtn = gr.Button("ip被OpenAI禁了，正在处理", elem_id="buy_btn")
                     buyBtn = gr.Markdown('''
@@ -284,9 +284,9 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
         fn=transfer_input, inputs=[user_input], outputs=[user_question, user_input, submitBtn, cancelBtn], show_progress=True
     )
 
-    get_usage_args = dict(
-        fn=get_usage, inputs=[user_api_key], outputs=[usageTxt], show_progress=False
-    )
+    # get_usage_args = dict(
+    #     fn=get_usage, inputs=[user_api_key], outputs=[usageTxt], show_progress=False
+    # )
 
 
     # buyBtn.click(
