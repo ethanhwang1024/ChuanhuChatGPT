@@ -284,7 +284,7 @@ def predict(
     all_token_counts,
     top_p,
     temperature,
-    stream=False,
+    stream=True,
     selected_model=MODELS[0],
     use_websearch=False,
     files = None,

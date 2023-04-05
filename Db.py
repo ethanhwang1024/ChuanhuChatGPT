@@ -29,7 +29,7 @@ def save_data(df):
     for index, row in df.iterrows():
         query = "UPDATE tasks SET id='{}', name='{}', param='{}',paramtype='{}',referparam='{}'" \
                 ",diff='{}',difftype='{}',fixvalue='{}' where id='{}'"
-        query = query.format(row.id, row.name, row.param,row.paramtype,row.referparam,row['diff'],row.difftype,row.fixvalue,row.id)
+        query = query.format(row['id'], row['name'], row['param'],row.paramtype,row.referparam,row['diff'],row.difftype,row.fixvalue,row['id'])
         print(query)
         cursor.execute(query)
         conn.commit()
