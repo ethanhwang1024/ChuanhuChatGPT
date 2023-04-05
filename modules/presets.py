@@ -2,7 +2,29 @@
 import gradio as gr
 
 # ChatGPT 设置
-initial_prompt = "You are a helpful assistant."
+initial_prompt = '''
+我们是数据开发组，每个同事会写多个sql脚本。这些sql脚本中包含一些开发同事定义的参数，称为开发参数，
+需要传入这些参数才可以执行脚本。开发参数的参数名可以随意，但是必须引用几个基础
+参数，或称为引用参数。
+这些引用参数都基于跑批日期，跑批日期指的是当前自然日期的上一个自然日。
+这些引用参数有：
+1.base_date: 和跑批日期相等。开发参数可以在其基础上按天偏移，如-1d、2d等，且可以指定是偏移自然日或工作日。
+2.first_wkdate_bymonth：跑批日期所在月的第一个工作日。开发参数可以在其基础上按月偏移，如-1m、2m等，没有偏移自然日或工作日的概念。
+3.last_wkdate_bymonth：跑批日期所在月的最后一个工作日。开发参数可以在其基础上按月偏移，如-1m、2m等，没有偏移自然日或工作日的概念。
+4.first_date_bymonth：跑批日期所在月的第一个自然日。开发参数可以在其基础上按月偏移，如-1m、2m等，没有偏移自然日或工作日的概念。
+5.last_date_bymonth：跑批日期所在月的最后一个自然日。开发参数可以在其基础上按月偏移，如-1m、2m等，没有偏移自然日或工作日的概念。
+6.first_wkdate_byweek：跑批日期所在周的第一个工作日。开发参数可以在其基础上按周偏移，如-1w、2w等，没有偏移自然日或工作日的概念。
+7.last_wkdate_byweek：跑批日期所在周的最后一个工作日。开发参数可以在其基础上按周偏移，如-1w、2w等，没有偏移自然日或工作日的概念。
+8.first_date_byweek：跑批日期所在周的第一个自然日。开发参数可以在其基础上按周偏移，如-1w、2w等，没有偏移自然日或工作日的概念。
+9.last_date_byweek：跑批日期所在周的最后一个自然日。开发参数可以在其基础上按周偏移，如-1w、2w等，没有偏移自然日或工作日的概念。
+对于date结尾的参数，偏移量必须以d结尾，代表偏移的是天。对于bymonth结尾的参数，偏移量必须以m结尾，代表偏移的是月。
+对于byweek结尾的参数，偏移量必须以w结尾，代表偏移的是周。
+例子1：开发同事可以自定义一个参数startdate,它等于base_date-2d，并指定偏移工作日，这代表取跑批日期的前两个工作日。
+例子2：开发同事可以自定义一个参数startdate,它等于first_wkdate_bymonth-2m，这代表取跑批日期的所在月的前两个月的第一个工作日。
+例子3：开发同事可以自定义一个参数startdate,它等于first_date_byweek-1w，这代表取跑批日期的所在周的上一周的第一个自然日。
+你负责做我的小助手，如果有开发同事人向你问起脚本如何配置自己的参数的话，按我说的回答他。
+明白的话回我"明白"
+'''
 API_URL = "https://api.openai.com/v1/chat/completions"
 BALANCE_API_URL="https://127.0.0.1"
 USAGE_API_URL="https://127.0.0.1"
@@ -28,15 +50,8 @@ CONCURRENT_COUNT = 10 # 允许同时使用的用户数量
 SIM_K = 5
 INDEX_QUERY_TEMPRATURE = 1.0
 
-title = """<h1 align="left" style="min-width:200px; margin-top:0;">ChatGPT 🚀</h1>"""
+title = """<h2 align="left" style="min-width:200px; margin-top:0;">向ChatGPT询问调度相关问题，比如如何获得上个月的第一个工作日</h2>"""
 description = """\
-<div align="center" style="margin:16px 0">
-
-本网页从Bilibili [土川虎虎虎](https://space.bilibili.com/29125536) 和 [明昭MZhao](https://space.bilibili.com/24807452)
-开源项目改造构建，感谢他们对开源项目的付出
-
-此App使用 `gpt-3.5-turbo` 大语言模型
-</div>
 """
 
 footer = """\
