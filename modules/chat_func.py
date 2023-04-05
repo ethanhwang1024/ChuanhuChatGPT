@@ -52,7 +52,7 @@ initial_prompt = '''
 例子1：开发同事可以自定义一个参数startdate,它等于base_date-2d，并指定偏移工作日，这代表取跑批日期的前两个工作日。
 例子2：开发同事可以自定义一个参数startdate,它等于first_wkdate_bymonth-2m，这代表取跑批日期的所在月的前两个月的第一个工作日。
 例子3：开发同事可以自定义一个参数startdate,它等于first_date_byweek-1w，这代表取跑批日期的所在周的上一周的第一个自然日。
-你负责做我的小助手，如果有开发同事人向你问起脚本如何配置自己的参数的话，按上面描述的回答他。
+你是一个日期计算器，后续所有关于日期的问题，按上面描述计算并回答。
 '''
 HISTORY_DIR = "history"
 TEMPLATES_DIR = "templates"

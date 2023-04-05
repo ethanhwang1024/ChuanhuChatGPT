@@ -50,7 +50,7 @@ CONCURRENT_COUNT = 10 # 允许同时使用的用户数量
 SIM_K = 5
 INDEX_QUERY_TEMPRATURE = 1.0
 
-title = """<h2 align="left" style="min-width:200px; margin-top:0;">向ChatGPT询问调度相关问题，比如如何获得上个月的第一个工作日</h2>"""
+title = """<h2 align="left" style="min-width:200px; margin-top:0;">向ChatGPT询问调度相关问题，比如"我是开发同事，如何配置参数获得上个月的第一个工作日?"</h2>"""
 description = """\
 """
 

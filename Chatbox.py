@@ -563,10 +563,11 @@ with gr.Blocks(css=customCSS,theme=small_and_beautiful_theme) as demo:
         user_question = gr.State("")
         outputing = gr.State(False)
         topic = gr.State("未命名对话历史记录")
-
+        gr.Markdown("")
+        gr.Markdown("")
         with gr.Row():
             gr.HTML(title)
-            status_display = gr.Markdown(get_geoip(), elem_id="status_display")
+            # status_display = gr.Markdown(get_geoip(), elem_id="status_display")
 
         with gr.Row().style(equal_height=True):
             with gr.Column(scale=5):
@@ -680,7 +681,7 @@ with gr.Blocks(css=customCSS,theme=small_and_beautiful_theme) as demo:
                 top_p,
                 temperature
             ],
-            outputs=[chatbot, history, status_display, token_count],
+            outputs=[chatbot, history, token_count],
             show_progress=True,
         )
 
@@ -714,7 +715,7 @@ with gr.Blocks(css=customCSS,theme=small_and_beautiful_theme) as demo:
 
         emptyBtn.click(
             reset_state,
-            outputs=[chatbot, history, token_count, status_display],
+            outputs=[chatbot, history, token_count],
             show_progress=True,
         )
         emptyBtn.click(**reset_textbox_args)
@@ -730,7 +731,7 @@ with gr.Blocks(css=customCSS,theme=small_and_beautiful_theme) as demo:
                 top_p,
                 temperature,
             ],
-            [chatbot, history, status_display, token_count],
+            [chatbot, history, token_count],
             show_progress=True,
         ).then(**end_outputing_args)
         # retryBtn.click(**get_usage_args)
@@ -738,13 +739,13 @@ with gr.Blocks(css=customCSS,theme=small_and_beautiful_theme) as demo:
         delFirstBtn.click(
             delete_first_conversation,
             [history, token_count],
-            [history, token_count, status_display],
+            [history, token_count],
         )
 
         delLastBtn.click(
             delete_last_conversation,
             [chatbot, history, token_count],
-            [chatbot, history, token_count, status_display],
+            [chatbot, history, token_count],
             show_progress=True,
         )
 
@@ -760,7 +761,7 @@ with gr.Blocks(css=customCSS,theme=small_and_beautiful_theme) as demo:
                 temperature,
                 gr.State(sum(token_count.value[-4:])),
             ],
-            [chatbot, history, status_display, token_count],
+            [chatbot, history, token_count],
             show_progress=True,
         )
         # reduceTokenBtn.click(**get_usage_args)
@@ -787,18 +788,18 @@ with gr.Blocks(css=customCSS,theme=small_and_beautiful_theme) as demo:
 
         # Advanced
         default_btn.click(
-            reset_default, [], [apiurlTxt, proxyTxt, status_display], show_progress=True
+            reset_default, [], [apiurlTxt, proxyTxt], show_progress=True
         )
         changeAPIURLBtn.click(
             change_api_url,
             [apiurlTxt],
-            [status_display],
+            [],
             show_progress=True,
         )
         changeProxyBtn.click(
             change_proxy,
             [proxyTxt],
-            [status_display],
+            [],
             show_progress=True,
         )
 
