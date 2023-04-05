@@ -24,14 +24,18 @@ def read_data():
     return df
 
 def save_data(df):
+    df = df[df['name']!='']
     conn = connect_db()
     cursor = conn.cursor()
+    distinct_df = df.drop_duplicates(subset=['name'],keep='first')
+    for index,row in distinct_df.iterrows():
+        delete = "delete from tasks where name='{}'".format(row['name'])
+        cursor.execute(delete)
     for index, row in df.iterrows():
-        query = "UPDATE tasks SET id='{}', name='{}', param='{}',paramtype='{}',referparam='{}'" \
-                ",diff='{}',difftype='{}',fixvalue='{}' where id='{}'"
-        query = query.format(row['id'], row['name'], row['param'],row.paramtype,row.referparam,row['diff'],row.difftype,row.fixvalue,row['id'])
-        print(query)
-        cursor.execute(query)
+        insert = "insert into tasks (name,param,paramtype,referparam,diff,difftype,fixvalue) " \
+                 "values ('{}','{}','{}','{}','{}','{}','{}')".format(row['name'], row['param'],row.paramtype,row.referparam,row['diff'],row.difftype,row.fixvalue,row['name'])
+        print(insert)
+        cursor.execute(insert)
         conn.commit()
 
 if __name__ == '__main__':

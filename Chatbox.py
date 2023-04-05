@@ -90,8 +90,9 @@ with open("assets/custom.css", "r", encoding="utf-8") as f:
 #     customCSS = f.read()
 with gr.Blocks(css=customCSS,theme=small_and_beautiful_theme) as demo:
     gr.HTML("""<h1 align="left" style="min-width:200px; margin-top:0;">统一参数配置平台DEMO</h1>""")
-
-
+    gr.Markdown("")
+    gr.Markdown("")
+    gr.Markdown("<h3>脚本参数录入(直接在表格上进行增删改查)：<h3>")
     sql_name = gr.Textbox(
         show_label=True,
         placeholder="输入脚本名",
@@ -100,10 +101,11 @@ with gr.Blocks(css=customCSS,theme=small_and_beautiful_theme) as demo:
     )
 
     inter_df = gr.DataFrame(
-        headers=["id","脚本名", "脚本参数", "参数类型", "引用参数", "偏移量", "偏移属性(对周月偏移无效)", "固定值"],
-        datatype=["str","str", "str", "str", "str", "str", "str","str"],
+        headers=["脚本名", "脚本参数", "参数类型", "引用参数", "偏移量", "偏移属性(对周月偏移无效)", "固定值"],
+        datatype=["str", "str", "str", "str", "str", "str","str"],
         max_rows=10,
-        col_count=[8,"fixed"],
+        col_count=[7,"fixed"],
+        row_count=[6,"dynamic"],
         interactive=True
     )
     def readAll(sqlName=''):
@@ -115,19 +117,13 @@ with gr.Blocks(css=customCSS,theme=small_and_beautiful_theme) as demo:
         if len(df)==0:
             df = pd.DataFrame(data=None,columns=['result'])
             df.loc[1] = ['不存在该脚本']
+        else:
+            df = df.drop(['id'],axis=1)
         return df
 
     def readAllWait(sqlName=''):
         time.sleep(4)
-        df = read_data()
-        df = df.sort_values(by=['name'])
-        df = df.rename({'name':'脚本名','param':'脚本参数','paramtype':'参数类型','referparam':'引用参数','diff':'偏移量','difftype':'偏移属性','fixvalue':'固定值'},axis=1)
-        if sqlName!='':
-            df = df[df['脚本名'].str.contains(sqlName)]
-        if len(df)==0:
-            df = pd.DataFrame(data=None,columns=['result'])
-            df.loc[1] = ['不存在该脚本']
-        return df
+        return readAll()
 
 
     sql_name.submit(readAll,inputs=sql_name,outputs=inter_df)
@@ -141,6 +137,8 @@ with gr.Blocks(css=customCSS,theme=small_and_beautiful_theme) as demo:
             df = df.rename({'脚本名': 'name', '脚本参数': 'param', '参数类型': 'paramtype', '引用参数': 'referparam', '偏移量': 'diff',
                             '偏移属性': 'difftype', '固定值': 'fixvalue'}, axis=1)
             save_data(df)
+
+
         submitBtn.click(submitdata,inputs=inter_df,outputs=None)
         # submitBtn.click(submitdata, inputs=inter_df, outputs=None).then(readAll, inputs=sql_name, outputs=inter_df)
 
