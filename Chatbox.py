@@ -809,7 +809,7 @@ with gr.Blocks(css=customCSS,theme=small_and_beautiful_theme) as demo:
         + colorama.Style.RESET_ALL
     )
     # 默认开启本地服务器，默认可以直接从IP访问，默认不创建公开分享链接
-    demo.title = "ChatGPT 🚀"
+    demo.title = "统一参数配置平台"
 
 if __name__ == "__main__":
     reload_javascript()
