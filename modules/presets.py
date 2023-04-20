@@ -3,7 +3,7 @@ import gradio as gr
 
 # ChatGPT 设置
 initial_prompt = "You are a helpful assistant."
-API_URL = "https://api.openai.com/v1/chat/completions"
+API_URL = "https://openai.api2d.net/v1/chat/completions"
 BALANCE_API_URL="https://127.0.0.1"
 USAGE_API_URL="https://127.0.0.1"
 HISTORY_DIR = "history"

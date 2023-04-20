@@ -229,7 +229,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                             show_label=True,
                             placeholder=f"在这里输入API地址...",
                             label="API地址",
-                            value="https://api.openai.com/v1/chat/completions",
+                            value="https://openai.api2d.net/v1/chat/completions",
                             lines=2,
                         )
                         changeAPIURLBtn = gr.Button("🔄 切换API地址")
