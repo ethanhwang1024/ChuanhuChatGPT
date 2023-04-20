@@ -325,23 +325,23 @@ def predict(
     else:
         display_reference = ""
 
-    if len(openai_api_key) != 51:
-        status_text = standard_error_msg + no_apikey_msg
-        logging.info(status_text)
-        chatbot.append((inputs, ""))
-        if len(history) == 0:
-            history.append(construct_user(inputs))
-            history.append("")
-            all_token_counts.append(0)
-        else:
-            history[-2] = construct_user(inputs)
-        yield chatbot+[(inputs, "")], history, status_text, all_token_counts
-        return
-    elif len(inputs.strip()) == 0:
-        status_text = standard_error_msg + no_input_msg
-        logging.info(status_text)
-        yield chatbot+[(inputs, "")], history, status_text, all_token_counts
-        return
+    # if len(openai_api_key) != 51:
+    #     status_text = standard_error_msg + no_apikey_msg
+    #     logging.info(status_text)
+    #     chatbot.append((inputs, ""))
+    #     if len(history) == 0:
+    #         history.append(construct_user(inputs))
+    #         history.append("")
+    #         all_token_counts.append(0)
+    #     else:
+    #         history[-2] = construct_user(inputs)
+    #     yield chatbot+[(inputs, "")], history, status_text, all_token_counts
+    #     return
+    # elif len(inputs.strip()) == 0:
+    #     status_text = standard_error_msg + no_input_msg
+    #     logging.info(status_text)
+    #     yield chatbot+[(inputs, "")], history, status_text, all_token_counts
+    #     return
 
     if stream:
         logging.info("使用流式传输")
