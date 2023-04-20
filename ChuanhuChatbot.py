@@ -121,8 +121,10 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
 
                     # buyBtn = gr.Button("ip被OpenAI禁了，正在处理", elem_id="buy_btn")
                     buyBtn = gr.Markdown('''
-                    如无法使用请先访问[huggingface](https://huggingface.co/)
-                                          上的相关项目''',elem_id="buy_btn")
+                    如无法使用请先访问[API2d](https://api2d.com/)
+                                          购买并复制key进来''',elem_id="buy_btn")
+                    gr.Markdown('''
+                    key保留在浏览器上，本站不会保留任何key和聊天信息''',elem_id="buy_btn")
                     # buyBtn = gr.Button("去外部网站购买专属KEY?",elem_id="buy_btn").style(size="sm")
 
                     model_select_dropdown = gr.Dropdown(
