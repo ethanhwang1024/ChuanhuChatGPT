@@ -1,5 +1,7 @@
 # -*- coding:utf-8 -*-
 from __future__ import annotations
+
+import base64
 from typing import TYPE_CHECKING, Any, Callable, Dict, List, Tuple, Type
 import logging
 import json
@@ -7,6 +9,8 @@ import os
 import datetime
 import hashlib
 import csv
+
+import numpy as np
 import requests
 import re
 import html
@@ -22,6 +26,10 @@ from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
+from spclient import client
+import io
+import wave
+
 from modules.presets import *
 import modules.shared as shared
 
@@ -32,6 +40,7 @@ logging.basicConfig(
 
 if TYPE_CHECKING:
     from typing import TypedDict
+
 
     class DataframeData(TypedDict):
         headers: List[str]
@@ -80,7 +89,7 @@ def normalize_markdown(md_text: str) -> str:
             normalized_lines.append(line)
         elif inside_list and line.strip() == "":
             if i < len(lines) - 1 and not re.match(
-                r"^(\d+\.|-|\*|\+)\s", lines[i + 1].strip()
+                    r"^(\d+\.|-|\*|\+)\s", lines[i + 1].strip()
             ):
                 normalized_lines.append(line)
             continue
@@ -118,8 +127,8 @@ def convert_mdtext(md_text):
 
 def convert_asis(userinput):
     return (
-        f'<p style="white-space:pre-wrap;">{html.escape(userinput)}</p>'
-        + ALREADY_CONVERTED_MARK
+            f'<p style="white-space:pre-wrap;">{html.escape(userinput)}</p>'
+            + ALREADY_CONVERTED_MARK
     )
 
 
@@ -136,7 +145,7 @@ def detect_language(code):
     else:
         first_line = code.strip().split("\n", 1)[0]
     language = first_line.lower() if first_line else ""
-    code_without_language = code[len(first_line) :].lstrip() if first_line else code
+    code_without_language = code[len(first_line):].lstrip() if first_line else code
     return language, code_without_language
 
 
@@ -292,7 +301,7 @@ def load_template(filename, mode=0):
         lines = [[i["act"], i["prompt"]] for i in lines]
     else:
         with open(
-            os.path.join(TEMPLATES_DIR, filename), "r", encoding="utf8"
+                os.path.join(TEMPLATES_DIR, filename), "r", encoding="utf8"
         ) as csvfile:
             reader = csv.reader(csvfile)
             lines = list(reader)
@@ -431,15 +440,42 @@ def cancel_outputing():
     shared.state.interrupt()
 
 
-def transfer_input(inputs):
+def transfer_input(user_input):
     # 一次性返回，降低延迟
     textbox = reset_textbox()
     outputing = start_outputing()
     return (
-        inputs,
+        user_input,
         gr.update(value=""),
         gr.Button.update(visible=False),
         gr.Button.update(visible=True),
+    )
+
+
+def transfer_input1(vc_input2):
+    if vc_input2 is None:
+        print("没有输入")
+        return
+    sampling_rate, audio = vc_input2
+    input = ""
+    try:
+        with io.BytesIO() as buffer:
+            with wave.open(buffer, "wb") as wav_file:
+                wav_file.setnchannels(1)  # 单声道
+                wav_file.setsampwidth(2)  # 16位采样
+                wav_file.setframerate(sampling_rate)
+                wav_file.writeframes(audio.astype(np.int16).tobytes())
+            # base64_data = base64.b64encode(buffer.getvalue()).decode('utf-8')
+            response = client.asr(buffer.getvalue())
+            print(client.asr(buffer.getvalue()))
+            input = response['result'][0]
+            print("结果是" + input)
+    except:
+        input = "没有收到语音，可能是没有停止录制"
+    # textbox = reset_textbox()
+    # outputing = start_outputing()
+    return (
+        input
     )
 
 
@@ -462,6 +498,7 @@ def get_proxies():
 
     return proxies
 
+
 def run(command, desc=None, errdesc=None, custom_env=None, live=False):
     if desc is not None:
         print(desc)
@@ -473,16 +510,18 @@ Command: {command}
 Error code: {result.returncode}""")
 
         return ""
-    result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, env=os.environ if custom_env is None else custom_env)
+    result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
+                            env=os.environ if custom_env is None else custom_env)
     if result.returncode != 0:
         message = f"""{errdesc or 'Error running command'}.
 Command: {command}
 Error code: {result.returncode}
-stdout: {result.stdout.decode(encoding="utf8", errors="ignore") if len(result.stdout)>0 else '<empty>'}
-stderr: {result.stderr.decode(encoding="utf8", errors="ignore") if len(result.stderr)>0 else '<empty>'}
+stdout: {result.stdout.decode(encoding="utf8", errors="ignore") if len(result.stdout) > 0 else '<empty>'}
+stderr: {result.stderr.decode(encoding="utf8", errors="ignore") if len(result.stderr) > 0 else '<empty>'}
 """
         raise RuntimeError(message)
     return result.stdout.decode(encoding="utf8", errors="ignore")
+
 
 def versions_html():
     git = os.environ.get('GIT', "git")
@@ -504,11 +543,13 @@ Gradio: {gr.__version__}
 Commit: {commit_info}
 """
 
-def add_source_numbers(lst, source_name = "Source", use_source = True):
+
+def add_source_numbers(lst, source_name="Source", use_source=True):
     if use_source:
-        return [f'[{idx+1}]\t "{item[0]}"\n{source_name}: {item[1]}' for idx, item in enumerate(lst)]
+        return [f'[{idx + 1}]\t "{item[0]}"\n{source_name}: {item[1]}' for idx, item in enumerate(lst)]
     else:
-        return [f'[{idx+1}]\t "{item}"' for idx, item in enumerate(lst)]
+        return [f'[{idx + 1}]\t "{item}"' for idx, item in enumerate(lst)]
+
 
 def add_details(lst):
     nodes = []

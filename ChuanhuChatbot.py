@@ -11,7 +11,7 @@ from modules.presets import *
 from modules.overwrites import *
 from modules.chat_func import *
 # from modules.openai_func import get_usage
-
+import gradio.processing_utils as gr_processing_utils
 logging.basicConfig(
     level=logging.DEBUG,
     format="%(asctime)s [%(levelname)s] [%(filename)s:%(lineno)d] %(message)s",
@@ -30,6 +30,15 @@ authflag = False
 auth_list = []
 
 
+# audio_postprocess_ori = gr.Audio.postprocess
+#
+#
+# def audio_postprocess(self, y):
+#     data = audio_postprocess_ori(self, y)
+#     if data is None:
+#         return None
+#     return gr_processing_utils.encode_url_or_file_to_base64(data["name"])
+# gr.Audio.postprocess = audio_postprocess
 #
 # def redirect_to_outside():
 #     webbrowser.open_new_tab("https://chatgpt.insjc.info/")
@@ -97,6 +106,13 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                 with gr.Column(min_width=70, scale=1):
                     submitBtn = gr.Button("发送", variant="primary")
                     cancelBtn = gr.Button("取消", variant="secondary", visible=False)
+            with gr.Row():
+                with gr.Column(scale=12):
+                    vc_input2 = gr.Audio(label="语音输入(点录制再点停止录制，右上角x掉后可重新录制)", source="microphone")
+                with gr.Column(min_width=70, scale=1):
+                    submitBtn1 = gr.Button("发送", variant="primary")
+                    # cancelBtn1 = gr.Button("取消", variant="secondary", visible=False)
+
             with gr.Row():
                 emptyBtn = gr.Button(
                     "🧹 新的对话",
@@ -286,6 +302,9 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
         fn=transfer_input, inputs=[user_input], outputs=[user_question, user_input, submitBtn, cancelBtn], show_progress=True
     )
 
+
+
+
     # get_usage_args = dict(
     #     fn=get_usage, inputs=[user_api_key], outputs=[usageTxt], show_progress=False
     # )
@@ -302,6 +321,17 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     # user_input.submit(**get_usage_args)
 
     submitBtn.click(**transfer_input_args).then(**chatgpt_predict_args).then(**end_outputing_args)
+
+
+
+    transfer_input_args1 = dict(
+        fn=transfer_input1, inputs=[vc_input2], outputs=[user_question], show_progress=True
+    )
+    # def stop_recording():
+    #     vc_input2.stop()
+
+    # submitBtn1.click(stop_recording).then(**transfer_input_args1).then(**chatgpt_predict_args).then(**end_outputing_args)
+    submitBtn1.click(**transfer_input_args1).then(**chatgpt_predict_args).then(**end_outputing_args)
     # submitBtn.click(**get_usage_args)
 
     emptyBtn.click(
