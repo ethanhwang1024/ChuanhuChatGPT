@@ -459,6 +459,7 @@ def transfer_input1(vc_input2):
     sampling_rate, audio = vc_input2
     input = ""
     try:
+        audio = audio / np.max(np.abs(audio)) * 32767
         with io.BytesIO() as buffer:
             with wave.open(buffer, "wb") as wav_file:
                 wav_file.setnchannels(1)  # 单声道
